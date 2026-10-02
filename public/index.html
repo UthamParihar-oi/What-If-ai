@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="What If? AI Scenario Simulator - Explore hypothetical scenarios with AI">
+    <title>What If? — AI Scenario Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-animation" aria-hidden="true">
+        <canvas id="stars-canvas"></canvas>
+    </div>
+
+    <header class="header" role="banner">
+        <div class="container header-content">
+            <div class="logo" aria-label="What If? AI Scenario Simulator">
+                <span class="logo-icon" aria-hidden="true">◈</span>
+                <span class="logo-text">WHAT IF?</span>
+            </div>
+            <nav class="nav" role="navigation" aria-label="Main navigation">
+                <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu">
+                    <span class="hamburger" aria-hidden="true"></span>
+                </button>
+                <ul id="nav-menu" class="nav-menu">
+                    <li><a href="#simulator" class="nav-link">Simulator</a></li>
+                    <li><a href="#history" class="nav-link">History</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main" role="main">
+        <section id="hero" class="hero" aria-labelledby="hero-title">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 id="hero-title" class="hero-title">
+                        <span class="title-line">WHAT IF?</span>
+                        <span class="title-line">AI SCENARIO SIMULATOR</span>
+                    </h1>
+                    <p class="hero-tagline">"Imagine the impossible. Explore the consequences."</p>
+                    <p class="hero-description">Enter a hypothetical scenario and let AI explore its impact, challenges, possible solutions and long-term consequences.</p>
+
+                    <form id="scenario-form" class="scenario-form" novalidate>
+                        <div class="input-group">
+                            <label for="scenario-input" class="visually-hidden">Enter your what-if scenario</label>
+                            <input
+                                type="text"
+                                id="scenario-input"
+                                class="scenario-input"
+                                placeholder="What if humans could live on Mars?"
+                                autocomplete="off"
+                                required
+                                aria-describedby="input-hint"
+                            >
+                            <button type="submit" class="btn btn-primary btn-explore" id="explore-btn" aria-label="Explore scenario">
+                                <span class="btn-text">Explore Scenario →</span>
+                                <span class="btn-loader" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <p id="input-hint" class="input-hint">Press Enter or click the button to explore</p>
+                    </form>
+
+                    <div class="example-scenarios" role="group" aria-label="Example scenarios">
+                        <span class="examples-label">Try an example:</span>
+                        <div class="examples-grid" id="examples-grid">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="random-scenario">
+                        <button type="button" class="btn btn-secondary btn-random" id="random-btn" aria-label="Generate random scenario">
+                            <span class="random-icon" aria-hidden="true">🎲</span>
+                            <span>Random What If?</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="categories" class="categories" aria-labelledby="categories-title">
+            <div class="container">
+                <h2 id="categories-title" class="section-title">Explore by Category</h2>
+                <div class="categories-grid" id="categories-grid" role="group" aria-label="Scenario categories">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section id="loading" class="loading-section hidden" aria-live="polite" aria-label="AI processing">
+            <div class="container">
+                <div class="loading-card glass-card">
+                    <div class="loading-animation" aria-hidden="true">
+                        <div class="orbital-ring"></div>
+                        <div class="orbital-ring"></div>
+                        <div class="orbital-ring"></div>
+                        <div class="core"></div>
+                    </div>
+                    <h2 class="loading-title">AI is imagining the possibilities…</h2>
+                    <p class="loading-subtitle">Analyzing scenario from multiple perspectives</p>
+                    <div class="loading-progress">
+                        <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="results" class="results-section hidden" aria-labelledby="results-title">
+            <div class="container">
+                <header class="results-header">
+                    <h2 id="results-title" class="results-title">Scenario Analysis</h2>
+                    <p class="results-scenario" id="results-scenario"></p>
+                    <button type="button" class="btn btn-ghost btn-new" id="new-scenario-btn" aria-label="Start new scenario">
+                        <span aria-hidden="true">←</span> New Scenario
+                    </button>
+                </header>
+
+                <div class="impact-indicators glass-card" id="impact-indicators" aria-label="Impact indicators">
+                    <h3 class="indicators-title">Impact Overview <span class="ai-estimate">(AI Estimates)</span></h3>
+                    <div class="indicators-grid" id="indicators-grid">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="results-grid" id="results-grid">
+                    <article class="result-card glass-card big-picture" id="card-summary" aria-labelledby="summary-title">
+                        <header class="card-header">
+                            <span class="card-icon" aria-hidden="true">◈</span>
+                            <h3 id="summary-title" class="card-title">BIG PICTURE</h3>
+                        </header>
+                        <div class="card-content" id="summary-content"></div>
+                    </article>
+
+                    <article class="result-card glass-card impact" id="card-impact" aria-labelledby="impact-title">
+                        <header class="card-header">
+                            <span class="card-icon" aria-hidden="true">🌍</span>
+                            <h3 id="impact-title" class="card-title">IMPACT</h3>
+                        </header>
+                        <div class="card-content">
+                            <div class="impact-categories" id="impact-content"></div>
+                        </div>
+                    </article>
+
+                    <article class="result-card glass-card challenges" id="card-challenges" aria-labelledby="challenges-title">
+                        <header class="card-header">
+                            <span class="card-icon" aria-hidden="true">⚠️</span>
+                            <h3 id="challenges-title" class="card-title">CHALLENGES</h3>
+                        </header>
+                        <div class="card-content">
+                            <ul class="challenges-list" id="challenges-content" role="list"></ul>
+                        </div>
+                    </article>
+
+                    <article class="result-card glass-card solutions" id="card-solutions" aria-labelledby="solutions-title">
+                        <header class="card-header">
+                            <span class="card-icon" aria-hidden="true">💡</span>
+                            <h3 id="solutions-title" class="card-title">POSSIBLE SOLUTIONS</h3>
+                        </header>
+                        <div class="card-content">
+                            <ul class="solutions-list" id="solutions-content" role="list"></ul>
+                        </div>
+                    </article>
+
+                    <article class="result-card glass-card future" id="card-future" aria-labelledby="future-title">
+                        <header class="card-header">
+                            <span class="card-icon" aria-hidden="true">🔮</span>
+                            <h3 id="future-title" class="card-title">LONG-TERM FUTURE</h3>
+                        </header>
+                        <div class="card-content">
+                            <ul class="future-list" id="future-content" role="list"></ul>
+                        </div>
+                    </article>
+                </div>
+
+                <section id="timeline" class="timeline-section glass-card hidden" aria-labelledby="timeline-title">
+                    <header class="card-header">
+                        <span class="card-icon" aria-hidden="true">⏳</span>
+                        <h3 id="timeline-title" class="card-title">FUTURE TIMELINE</h3>
+                    </header>
+                    <div class="card-content">
+                        <div class="timeline" id="timeline-content" role="list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <section id="error" class="error-section hidden" aria-live="assertive">
+            <div class="container">
+                <div class="error-card glass-card">
+                    <span class="error-icon" aria-hidden="true">⚠</span>
+                    <h2 class="error-title" id="error-title">Something went wrong</h2>
+                    <p class="error-message" id="error-message"></p>
+                    <button type="button" class="btn btn-primary" id="retry-btn" aria-label="Try again">Try Again</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section id="about" class="about-section" aria-labelledby="about-title">
+        <div class="container">
+            <div class="about-card glass-card">
+                <header class="about-header">
+                    <span class="about-icon" aria-hidden="true">📋</span>
+                    <h2 id="about-title" class="about-title">Project Information</h2>
+                </header>
+                <div class="about-content">
+                    <dl class="about-details">
+                        <div class="about-item">
+                            <dt class="about-label">
+                                <span class="about-label-icon" aria-hidden="true">👤</span>
+                                Student Name
+                            </dt>
+                            <dd class="about-value">Utham Kumar P</dd>
+                        </div>
+                        <div class="about-item">
+                            <dt class="about-label">
+                                <span class="about-label-icon" aria-hidden="true">🎓</span>
+                                College
+                            </dt>
+                            <dd class="about-value">Sri Venkateshwara College of Engineering (SVCE)<br>Autonomous Engineering College</dd>
+                        </div>
+                        <div class="about-item">
+                            <dt class="about-label">
+                                <span class="about-label-icon" aria-hidden="true">📚</span>
+                                Class
+                            </dt>
+                            <dd class="about-value">1st Year — CSE, D Section</dd>
+                        </div>
+                        <div class="about-item">
+                            <dt class="about-label">
+                                <span class="about-label-icon" aria-hidden="true">🆔</span>
+                                USN
+                            </dt>
+                            <dd class="about-value">SVCE26CS196</dd>
+                        </div>
+                        <div class="about-item">
+                            <dt class="about-label">
+                                <span class="about-label-icon" aria-hidden="true">👨‍🏫</span>
+                                Project Submitted To
+                            </dt>
+                            <dd class="about-value">Dr. Sunil Kumar KN</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <aside id="history" class="history-panel" aria-labelledby="history-title">
+        <div class="history-header">
+            <h2 id="history-title" class="history-title">Recent Scenarios</h2>
+            <button type="button" class="btn btn-ghost btn-clear" id="clear-history-btn" aria-label="Clear history">Clear</button>
+        </div>
+        <ul class="history-list" id="history-list" role="list" aria-label="Previously explored scenarios">
+            <!-- Populated by JavaScript from localStorage -->
+        </ul>
+        <p class="history-empty" id="history-empty">No scenarios explored yet. Try one above!</p>
+    </aside>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon" aria-hidden="true">◈</span>
+                    <span class="logo-text">WHAT IF?</span>
+                </div>
+                <p class="footer-tagline">"Imagine the impossible. Explore the consequences."</p>
+                <p class="footer-description">An AI-powered educational tool for exploring hypothetical scenarios. Built as a first-year engineering project.</p>
+                <div class="footer-links">
+                    <a href="#hero" class="footer-link">Simulator</a>
+                    <a href="#history" class="footer-link">History</a>
+                    <a href="#about" class="footer-link">Project Info</a>
+                </div>
+                <p class="footer-copyright">© 2025 What If? AI Scenario Simulator</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
