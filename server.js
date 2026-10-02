@@ -388,11 +388,11 @@ app.use((err, req, res, next) => {
 // ========================================
 // START SERVER
 // ========================================
-const server = app.listen(PORT, '127.0.0.1', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`
 ╔══════════════════════════════════════════════════════════════╗
 ║  What If? AI Scenario Simulator                              ║
-║  Server running on http://localhost:${PORT}                      ║
+║  Server running on http://0.0.0.0:${PORT}                        ║
 ║                                                              ║
 ║  API Endpoint: POST /api/simulate                            ║
 ║  Health Check: GET  /api/health                              ║
@@ -417,3 +417,4 @@ process.on('SIGINT', () => {
     console.log('SIGINT received. Shutting down gracefully...');
     process.exit(0);
 });
+
