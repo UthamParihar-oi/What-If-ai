@@ -143,7 +143,7 @@ Frontend renders results in cards, indicators, timeline
    ```
 
 5. **Open in browser**
-   Navigate to `http://localhost:3000`
+   what-if-ai-production.up.railway.app
 
 ---
 
